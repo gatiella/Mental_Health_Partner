@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}User Preferences - Mental Health Partner{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Conversation Preferences</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label class="form-label">AI Response Style</label>
+                            <select class="form-select" name="conversation_style">
+                                {% for style, name in preferences.CONVERSATION_STYLE_CHOICES %}
+                                    <option value="{{ style }}" {% if preferences.conversation_style == style %}selected{% endif %}>
+                                        {{ name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">
+                                Choose how you want the AI to communicate with you
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Response Length</label>
+                            <div class="btn-group" role="group">
+                                {% for length, name in preferences.RESPONSE_LENGTH_CHOICES %}
+                                    <input type="radio" class="btn-check" name="ai_response_length"
+                                           id="length_{{ length }}" value="{{ length }}"
+                                           {% if preferences.ai_response_length == length %}checked{% endif %}>
+                                    <label class="btn btn-outline-primary" for="length_{{ length }}">
+                                        {{ name }}
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Interface Theme</label>
+                            <div class="d-flex gap-3">
+                                {% for theme, name in preferences.THEME_CHOICES %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="theme"
+                                               id="theme_{{ theme }}" value="{{ theme }}"
+                                               {% if preferences.theme == theme %}checked{% endif %}>
+                                        <label class="form-check-label" for="theme_{{ theme }}">
+                                            {{ name }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Save Preferences
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Privacy Settings</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch"
+                               id="dataCollection" {% if preferences.allow_data_analysis %}checked{% endif %}>
+                        <label class="form-check-label" for="dataCollection">
+                            Allow Data Analysis
+                        </label>
+                    </div>
+                    <div class="form-check form-switch mt-3">
+                        <input class="form-check-input" type="checkbox" role="switch"
+                               id="anonymousData" {% if preferences.anonymous_analytics %}checked{% endif %}>
+                        <label class="form-check-label" for="anonymousData">
+                            Anonymous Analytics
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Conversations - Mental Health Partner{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1>Your Conversations</h1>
+        <p class="text-muted">Review your past conversations or start a new one.</p>
+    </div>
+    <div class="col-auto">
+        <a href="{% url 'web-conversation-create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> New Conversation
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Filter Conversations</h5>
+            </div>
+            <div class="card-body">
+                <form method="get">
+                    <div class="mb-3">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{ request.GET.search }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="is_active" 
+                                   id="all" value="" {% if request.GET.is_active == '' %}checked{% endif %}>
+                            <label class="form-check-label" for="all">All</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="is_active" 
+                                   id="active" value="True" {% if request.GET.is_active == 'True' %}checked{% endif %}>
+                            <label class="form-check-label" for="active">Active</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="is_active" 
+                                   id="ended" value="False" {% if request.GET.is_active == 'False' %}checked{% endif %}>
+                            <label class="form-check-label" for="ended">Ended</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ordering" class="form-label">Sort By</label>
+                        <select class="form-select" id="ordering" name="ordering">
+                            <option value="-updated_at" {% if request.GET.ordering == '-updated_at' %}selected{% endif %}>
+                                Last Updated (newest first)
+                            </option>
+                            <option value="updated_at" {% if request.GET.ordering == 'updated_at' %}selected{% endif %}>
+                                Last Updated (oldest first)
+                            </option>
+                            <option value="-created_at" {% if request.GET.ordering == '-created_at' %}selected{% endif %}>
+                                Date Created (newest first)
+                            </option>
+                            <option value="created_at" {% if request.GET.ordering == 'created_at' %}selected{% endif %}>
+                                Date Created (oldest first)
+                            </option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-8">
+        {% if conversation_list %}
+            <div class="list-group">
+                {% for conversation in conversation_list %}
+                <a href="{% url 'web-conversation-detail' conversation.id %}" class="list-group-item list-group-item-action">                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ conversation.title }}</h5>
+                        <small>{{ conversation.updated_at|timesince }} ago</small>
+                    </div>
+                    <p class="mb-1">{{ conversation.summary|truncatechars:120 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            {{ conversation.message_count }} messages
+                            {% if conversation.mood_start %}
+                                • Started: <span class="badge bg-{% if conversation.mood_start == 'positive' %}success{% elif conversation.mood_start == 'negative' %}danger{% else %}secondary{% endif %}">
+                                    {{ conversation.mood_start }}
+                                </span>
+                            {% endif %}
+                            {% if conversation.mood_end %}
+                                • Ended: <span class="badge bg-{% if conversation.mood_end == 'positive' %}success{% elif conversation.mood_end == 'negative' %}danger{% else %}secondary{% endif %}">
+                                    {{ conversation.mood_end }}
+                                </span>
+                            {% endif %}
+                        </small>
+                        <span class="badge {% if conversation.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                            {{ conversation.is_active|yesno:"Active,Ended" }}
+                        </span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            
+            {% if is_paginated %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.is_active %}&is_active={{ request.GET.is_active }}{% endif %}{% if request.GET.ordering %}&ordering={{ request.GET.ordering }}{% endif %}">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.is_active %}&is_active={{ request.GET.is_active }}{% endif %}{% if request.GET.ordering %}&ordering={{ request.GET.ordering }}{% endif %}">Previous</a>
+                    </li>
+                    {% endif %}
+                    
+                    <li class="page-item disabled">
+                        <a class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+                    </li>
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.is_active %}&is_active={{ request.GET.is_active }}{% endif %}{% if request.GET.ordering %}&ordering={{ request.GET.ordering }}{% endif %}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.is_active %}&is_active={{ request.GET.is_active }}{% endif %}{% if request.GET.ordering %}&ordering={{ request.GET.ordering }}{% endif %}">Last &raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center p-5">
+                <div class="mb-4">
+                    <i class="bi bi-chat-dots" style="font-size: 3rem;"></i>
+                </div>
+                <h3>No conversations yet</h3>
+                <p class="text-muted">Start a new conversation to begin chatting with your mental health partner.</p>
+                <a href="{% url 'web-conversation-create' %}" class="btn btn-primary mt-3">
+                    Start Your First Conversation
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

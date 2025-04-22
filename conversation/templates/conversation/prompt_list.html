@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Helpful Prompts{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1>Helpful Prompts</h1>
+        <p class="lead">Use these pre-written prompts to help guide your conversations.</p>
+    </div>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="row">
+    {% for prompt in prompts %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">{{ prompt.title }}</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ prompt.content|truncatechars:150 }}</p>
+                    
+                    {% if prompt.category %}
+                        <span class="badge bg-info">{{ prompt.category }}</span>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#usePromptModal-{{ prompt.id }}">
+                        Use Prompt
+                    </button>
+                    <span class="text-muted float-end">
+                        Used {{ prompt.use_count }} times
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal for selecting conversation -->
+        <div class="modal fade" id="usePromptModal-{{ prompt.id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Use "{{ prompt.title }}" Prompt</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Select which conversation to use this prompt with:</p>
+                        
+                        <form action="{% url 'web-use-prompt' prompt.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <select name="conversation" class="form-select" required>
+                                    <option value="">Select a conversation</option>
+                                    {% for conversation in request.user.conversation_set.filter.active %}
+                                        <option value="{{ conversation.id }}">{{ conversation.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="text-center mt-3">
+                                <button type="submit" class="btn btn-primary">Apply Prompt</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col">
+            <div class="alert alert-info">
+                No prompts available at this time.
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

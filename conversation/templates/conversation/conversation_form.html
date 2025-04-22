@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}New Conversation - Mental Health Partner{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">Start a New Conversation</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" id="newConversationForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="initialMessage" class="form-label">How are you feeling today?</label>
+                        <textarea class="form-control" id="initialMessage" name="initial_message" rows="5" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Current Mood</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="mood" id="mood-positive" value="positive" autocomplete="off">
+                            <label class="btn btn-outline-success" for="mood-positive">Positive</label>
+                            
+                            <input type="radio" class="btn-check" name="mood" id="mood-neutral" value="neutral" autocomplete="off" checked>
+                            <label class="btn btn-outline-secondary" for="mood-neutral">Neutral</label>
+                            
+                            <input type="radio" class="btn-check" name="mood" id="mood-negative" value="negative" autocomplete="off">
+                            <label class="btn btn-outline-danger" for="mood-negative">Negative</label>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Start Conversation</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

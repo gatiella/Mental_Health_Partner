@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}User Profile - Mental Health Partner{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Profile Information</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {# Profile Picture Upload #}
+                        <div class="mb-4 text-center">
+                            <img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}/static/images/default-profile.png{% endif %}" 
+                                 class="img-fluid rounded-circle mb-3" 
+                                 alt="Profile picture"
+                                 style="width: 150px; height: 150px;">
+                            {{ form.profile_picture|as_crispy_field }}
+                        </div>
+
+                        {# Personal Information #}
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.username|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.email|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        {{ form.date_of_birth|as_crispy_field }}
+
+                        {# Emergency Contact #}
+                        <div class="border-top pt-3 mt-3">
+                            <h5>Emergency Contact</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form.emergency_contact_name|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.emergency_contact_phone|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {# Mental Health History #}
+                        <div class="border-top pt-3 mt-3">
+                            <h5>Mental Health Information</h5>
+                            {{ form.mental_health_history|as_crispy_field }}
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Save Changes
+                            </button>
+                            <a href="{% url 'user-preferences' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-gear"></i> Preferences
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            {# Add security section #}
+            <div class="card mt-md-0 mt-3">
+                <div class="card-header">
+                    <h5 class="mb-0">Account Security</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'password_change' %}" class="btn btn-outline-danger">
+                            <i class="bi bi-shield-lock"></i> Change Password
+                        </a>
+                        <!-- <a href="{% url 'logout' %}" class="btn btn-outline-dark">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

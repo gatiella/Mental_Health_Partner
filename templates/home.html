@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Welcome to Mental Health Partner{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- Centered Welcome Section -->
+    <div class="row justify-content-center text-center py-5">
+        <div class="col-lg-8">
+            <h1 class="display-4 fw-bold">Welcome to Mental Health Partner</h1>
+            <p class="lead text-secondary mb-4">A supportive space for your mental wellbeing journey</p>
+            
+            <p class="mb-4">Our AI-powered conversations provide a safe, non-judgmental environment to express your thoughts and feelings. Whether you're looking for support, coping strategies, or just someone to listen, we're here for you.</p>
+            
+            {% if user.is_authenticated %}
+                <div class="d-flex justify-content-center flex-wrap gap-3 mt-4">
+                    <a href="{% url 'web-conversation-create' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-plus-circle me-2"></i>Start a Conversation
+                    </a>
+                    <a href="{% url 'web-conversation-list' %}" class="btn btn-outline-secondary btn-lg">
+                        <i class="bi bi-chat-text me-2"></i>View Your Conversations
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Illustration Section -->
+    <div class="row justify-content-center py-4">
+        <div class="col-lg-8 col-md-10">
+            <div class="position-relative">
+                <img src="{% static 'images/mental-health-illustration.svg' %}" alt="Mental Health Illustration" class="img-fluid rounded shadow-lg" onerror="this.src='https://via.placeholder.com/600x400?text=Mental+Health+Partner'">
+                <div class="position-absolute bottom-0 end-0 bg-white p-3 rounded-circle shadow-lg d-none d-md-block" style="transform: translate(20%, 20%);">
+                    <i class="bi bi-heart-fill text-danger" style="font-size: 2rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5 py-4">
+        <div class="col-12 text-center mb-4">
+            <h2 class="fw-bold">How It Works</h2>
+            <p class="text-muted">Simple steps to better mental wellbeing</p>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex mb-4">
+                        <i class="bi bi-chat-dots text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="card-title h4 fw-bold">Express Yourself</h3>
+                    <p class="card-text text-muted">Share your thoughts and feelings in a safe, private environment with no judgment.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex mb-4">
+                        <i class="bi bi-lightbulb text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="card-title h4 fw-bold">Gain Insights</h3>
+                    <p class="card-text text-muted">Receive thoughtful responses and perspectives to help you understand your emotions better.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex mb-4">
+                        <i class="bi bi-heart text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="card-title h4 fw-bold">Practice Self-Care</h3>
+                    <p class="card-text text-muted">Learn practical techniques and strategies to support your mental wellbeing daily.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

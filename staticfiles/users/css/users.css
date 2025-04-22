@@ -1,0 +1,90 @@
+/* Auth Forms Styling */
+.auth-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.auth-card:hover {
+    transform: translateY(-5px);
+}
+
+.auth-header {
+    background: #2c3e50;
+    color: white;
+    border-radius: 12px 12px 0 0;
+    padding: 1.5rem;
+}
+
+.auth-title {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.auth-form {
+    padding: 2rem;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #34495e;
+}
+
+.form-control {
+    border: 2px solid #bdc3c7;
+    border-radius: 8px;
+    padding: 0.75rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: none;
+}
+
+.password-strength {
+    height: 4px;
+    margin-top: 0.5rem;
+    background: #ecf0f1;
+    border-radius: 2px;
+}
+
+.strength-indicator {
+    height: 100%;
+    width: 0;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-auth {
+    background: #3498db;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background 0.3s ease;
+}
+
+.btn-auth:hover {
+    background: #2980b9;
+    color: white;
+}
+
+/* Terms Modal */
+.terms-modal .modal-content {
+    border-radius: 12px;
+}
+
+.terms-modal .modal-header {
+    background: #2c3e50;
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+/* Error Messages */
+.error-message {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: none;
+}
